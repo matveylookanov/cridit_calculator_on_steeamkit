@@ -1,7 +1,7 @@
 import streamlit as st
-from database import authenticate_user
+from database import authenticate_user, activate_session
 
-# Настройка страницы (должна быть первой командой)
+# Настройка страницы
 st.set_page_config(page_title="Вход", layout="centered")
 
 # Форма входа
@@ -16,9 +16,14 @@ with st.form("login_form"):
     
     if submitted:
         if authenticate_user(username, password):
+            activate_session(username)  # Активируем сессию
             st.session_state.is_authenticated = True
-            st.session_state.username = username
+            st.session_state.username = username  # Сохраняем имя пользователя
             st.success("Вход выполнен успешно! Перенаправляем на главную страницу...")
             st.switch_page("main.py")  # Переход на главную страницу
         else:
             st.error("Неверное имя пользователя или пароль.")
+
+# Кнопка "Зарегистрироваться" внизу страницы
+if st.button("Нет аккаунта? Зарегистрироваться"):
+    st.switch_page("pages/registration.py")

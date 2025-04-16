@@ -1,4 +1,5 @@
 import streamlit as st
+from database import is_authenticated, deactivate_session
 
 # Настройка страницы
 st.set_page_config(
@@ -8,14 +9,15 @@ st.set_page_config(
 
 # Инициализация состояния пользователя
 if 'is_authenticated' not in st.session_state:
-    st.session_state.is_authenticated = False
-if 'username' not in st.session_state:
-    st.session_state.username = None
+    authenticated, username = is_authenticated()
+    st.session_state.is_authenticated = authenticated
+    st.session_state.username = username  # Инициализация имени пользователя
 
 # Функция для выхода
 def logout():
+    deactivate_session(st.session_state.username)
     st.session_state.is_authenticated = False
-    st.session_state.username = None
+    st.session_state.username = None  # Очищаем имя пользователя
 
 # Размещение кнопок в правом верхнем углу
 col1, col2, col3 = st.columns([7, 1, 1])  # col1 - основное пространство, col2 и col3 - кнопки
@@ -34,7 +36,5 @@ with col3:
 st.title("Добро пожаловать в кредитный калькулятор!")
 if st.session_state.is_authenticated:
     st.write(f"Привет, {st.session_state.username}!")
-    if st.button("Перейти к калькулятору"):
-        st.switch_page("pages/calculator.py")
 else:
     st.write("Пожалуйста, войдите или зарегистрируйтесь, чтобы использовать все функции.")
