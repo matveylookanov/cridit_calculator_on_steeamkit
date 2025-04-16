@@ -1,0 +1,22 @@
+# Папки и файлы Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Виртуальное окружение
+venv/
+env/
+.venv/
+
+# База данных SQLite
+users.db
+
+# Файлы Streamlit
+.streamlit/
+
+# Другие файлы
+*.log
+*.sqlite3
+*.db
+.DS_Store
